@@ -40,8 +40,7 @@ class Table extends Component {
                        </tbody>
                         </table> 
                         </center>
-                       
-                       
+            
             </div>
         );
     }

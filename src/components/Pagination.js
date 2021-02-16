@@ -22,7 +22,6 @@ render() {
             handleSearchChange={this.props.handleSearchChange}
             />
             <Table
-                
                sortDBName={this.props.sortDBName}
                 sortDBEmail={this.props.sortDBEmail}
                 sortDBPhone={this.props.sortDBPhone}
