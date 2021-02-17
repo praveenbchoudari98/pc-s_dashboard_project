@@ -1,10 +1,7 @@
-import React,{Component} from 'react';
-class Limiters extends Component {
-    render() {
-        return (
+const Limiters=(props)=>
             <div>
             <div className='entries'>
-            <label htmlFor='entries'>Show <select id='entries' onChange={this.props.handleEntryChange}>
+            <label htmlFor='entries'>Show <select id='entries' onChange={props.handleEntryChange}>
              <option value={20} selected>--Limit Entries--</option>
              <option value={10}>10</option>
              <option value={25}>25</option>
@@ -14,10 +11,7 @@ class Limiters extends Component {
              </label>
              </div>
              <div className='optimize'>
-           <input type='search' placeholder="Search" onChange={e=>this.props.handleSearchChange(e)}/>
+           <input type='search' placeholder="Search" onChange={e=>props.handleSearchChange(e)}/>
              </div>
             </div>
-        );
-    }
-}
 export default Limiters;
