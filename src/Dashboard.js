@@ -29,7 +29,7 @@ render()
 return (
             <div>
             <Navbar/>
-            <button><Link style={{textDecoration:'none',color:'inherit'}} to="/adduser">Add New User</Link></button>
+            <button className='adduser'><Link style={{textDecoration:'none',color:'inherit'}} to="/adduser">Add New User</Link></button>
             <br/>
             <br/>
             <br/>
@@ -50,7 +50,7 @@ return (
 
             <div className="card">
             <Link style={{textDecoration:'none',color:'inherit'}} to="/transactions">
-            <span class="icons text-purple material-icons">credit_card</span>
+            <span className="icons text-purple material-icons">credit_card</span>
               <div className="card_inner">
                 <h3 className="text-primary-p" >Transactions</h3>
                 <span className="font-bold text-title">44</span>
@@ -59,7 +59,7 @@ return (
             </div>
 
             <div className="card">
-            <span class="icons text-green material-icons">settings</span>
+            <span className="icons text-green material-icons">settings</span>
               <div className="card_inner">
                 <h3 className="text-primary-p" >Services</h3>
                 <span className="font-bold text-title">340</span>
@@ -67,7 +67,7 @@ return (
             </div>
 
             <div className="card">
-              <span class="icons text-orange material-icons">analytics</span>
+              <span className="icons text-orange material-icons">analytics</span>
               <div className="card_inner">
                 <h3 className="text-primary-p" >Analytics</h3>
                 <span className="font-bold text-title">645</span>

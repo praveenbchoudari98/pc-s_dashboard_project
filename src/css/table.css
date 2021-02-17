@@ -7,7 +7,6 @@ table,th,td{
 }
 table{
     position: relative;
-    top:-40px;
 }
 .Users table>thead>tr>th:nth-child(n+6){
     display: none;
@@ -85,5 +84,9 @@ img:hover {
     position: relative;
     left:0px;
     z-index: 10;
+}
+hr{
+    position: relative;
+    top:20px;
 }
 }

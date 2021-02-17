@@ -69,13 +69,21 @@ label {
       margin-top: 0;
     }
     input[type=submit]{
-    width: 100%;
+    width: 80%;
     left:0;
     }
    
     .formInput{
         height: 100%;
-        width: 90%;
-        left:-5%
+        width: 100%;
+        left:10px;
     }
+    input[type='text'],input[type='email'],input[type='number'] {
+      
+      margin-left: 0px;
+    }
+    input[type='file']{
+      margin-left: 0px;
+    }
+    
 }

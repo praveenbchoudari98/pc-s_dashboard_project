@@ -145,5 +145,8 @@ main {
             gap: 10px;
             margin-bottom: 0;
         }
+        .adduser{
+            left:66%;
+        }
     }
 }
