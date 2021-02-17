@@ -10,11 +10,9 @@ render() {
         let items=[]
         for (let i=1;i<=this.props.pages;i++){
             items.push(
-            <Pagination.Item onClick={()=>{this.props.activePage(i)}} active={i===this.props.active}  value={i}>{i}</Pagination.Item>)
+            <Pagination.Item onClick={()=>{this.props.activePage(i)}} active={i===this.props.active}  key={i}>{i}</Pagination.Item>)
         }
-        const style={
-          float:'right'
-        }
+       
         return (
             <div>
             <Limiters
@@ -31,7 +29,7 @@ render() {
                 createPDF={this.props.createPDF}
                 slNo={this.props.slNo}
               />
-                <Pagination style={style}>
+                <Pagination style={{width:'100%'}}>
                 <Pagination.First onClick={()=>this.props.activePage(1)}/>
                 <Pagination.Prev onClick={()=>this.props.activePage(this.props.active-1)}/>
                 {items}

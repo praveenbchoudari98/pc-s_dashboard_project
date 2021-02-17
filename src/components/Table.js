@@ -8,7 +8,7 @@ class Table extends Component {
             textAlign:'center'
         }
         return (
-            <div>
+            <div style={{overflowX:'auto'}}>
             
             <center>
             <table>

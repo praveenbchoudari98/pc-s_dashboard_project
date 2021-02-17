@@ -1,5 +1,6 @@
 .formInput{
     position:relative;
+    display:flex;
     left:30%;
     width: 500px;
     height: 400px;
@@ -74,5 +75,7 @@ label {
    
     .formInput{
         height: 100%;
+        width: 90%;
+        left:-5%
     }
 }
