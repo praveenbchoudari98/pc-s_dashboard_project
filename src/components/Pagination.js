@@ -29,7 +29,7 @@ render() {
                 createPDF={this.props.createPDF}
                 slNo={this.props.slNo}
               />
-                <Pagination style={{width:'100%'}}>
+                <Pagination className='pagination'>
                 <Pagination.First onClick={()=>this.props.activePage(1)}/>
                 <Pagination.Prev onClick={()=>this.props.activePage(this.props.active-1)}/>
                 {items}

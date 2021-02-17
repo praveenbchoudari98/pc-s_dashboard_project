@@ -71,6 +71,10 @@ img:hover {
     vertical-align: middle;
     
 }
+.pagination{
+    position: relative;
+    left:5%;
+  }
 @media screen and (max-width: 600px) {
      .optimize{
         position: relative;
@@ -89,4 +93,8 @@ hr{
     position: relative;
     top:20px;
 }
+.pagination{
+    left:0%;
+    overflow-x: auto;
+  }
 }
