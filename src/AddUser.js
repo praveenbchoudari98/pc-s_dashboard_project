@@ -24,7 +24,6 @@ constructor() {
     filteredData:[],
     act: 0,
     index: '',
-    count:0,
     active:1,
     pages:0,
     slNo:0
@@ -35,23 +34,23 @@ componentDidMount() {
   let entries = parseInt(document.getElementById('entries').value);
   // fetch('https://fakerapi.it/api/v1/persons?_quantity=1&_gender=male&_birthday_start=2005-01-01').then((response) => response.json())
   //   .then(json => reference.push({
-  //     fullName: json.data[0].firstname + ' ' + json.data[0].lastname,
-  //     email: json.data[0].email,
+    //     fullName: json.data[0].firstname + ' ' + json.data[0].lastname,
+    //     email: json.data[0].email,
   //     mobileNumber: json.data[0].phone,
   //     imageURL:json.data[0].image
   //   }))
   reference.on("value", snapshot => {
-   let dataList=firebaseLooper(snapshot)
+    let dataList=firebaseLooper(snapshot)
     this.setState({
       dataList,
       filteredData:dataList.filter((data,i)=>i<entries)
     },()=>{
-      this.assignPage();
+      this.assignPage(this.state.dataList);
     });
   });
 }
 handleChange = (e) => {
-
+  
   let input = e.target;
   this.setState(prevState => ({
     values: {
@@ -62,7 +61,7 @@ handleChange = (e) => {
 }
 handleImageChange = e => {
   if (e.target.files[0]) {
-      const image = e.target.files[0];
+    const image = e.target.files[0];
       this.setState({image});
   }
 }
@@ -73,33 +72,33 @@ handleUpload = (e) => {
   uploadTask.on('state_changed', (snapshot) => {
       const progress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
       this.setState({progress});
-  },
-  (error)=>{
-    console.log(error);
-  },
-  ()=>{fireStorage.ref('images').child(image.name).getDownloadURL().then(url => {
-          this.setState(prevState=>({
-            values:{
-              ...prevState.values,
-              imageURL:url
-            },
-            uploaded:true
-          }) 
-          ) 
-        });
-      })
+    },
+    (error)=>{
+      console.log(error);
+    },
+    ()=>{fireStorage.ref('images').child(image.name).getDownloadURL().then(url => {
+      this.setState(prevState=>({
+        values:{
+          ...prevState.values,
+          imageURL:url
+        },
+        uploaded:true
+      }) 
+      ) 
+    });
+  })
 }
 
 onSubmit = e => {
-
+  
   e.preventDefault();
   const input=document.getElementById('inputFile').files[0]
   document.getElementById('inputFile').value='';
   let reference = firebaseDB.ref('data');
-  let {filteredData,index,values} = this.state;
+  let {filteredData,index,values,active,pages} = this.state;
   if (this.state.act === 0) {
     reference.push(values);
-    this.resetPage();
+    this.resetPage(pages);
   }
    else {
     if(input===undefined)
@@ -114,33 +113,31 @@ onSubmit = e => {
       mobileNumber: values.mobileNumber,
       imageURL:url
     })
-    })
-    this.resetPage();
+  })
+    this.resetPage(active);
   })
   } 
-   else
+  else
       {
         
       let val = filteredData[index].email;
       reference.orderByChild('email').equalTo(val).on('value',snapshot=>{
         snapshot.forEach(snap=>{
-        reference.child(snap.key).update({
+          reference.child(snap.key).update({
         fullName: values.fullName,
         email: values.email,
         mobileNumber: values.mobileNumber,
         imageURL:values.imageURL
       })
-      })
-      this.resetPage();
     })
-        
-  }
-   
-  }
-}
-resetPage=()=>{
-  let {pages}=this.state;
+    this.resetPage(active);
+  })
   
+}
+
+}
+}
+resetPage=(active)=>{
   this.setState({
     values: {
       fullName: '',
@@ -151,14 +148,16 @@ resetPage=()=>{
     image:'',
     uploaded:false,
     progress:0,
+    active:active,
     act: 0,
     index: '',
   },()=>{
-    this.activePage(pages);
+    this.activePage(active);
   })
 }
 startEditing = (i) => {
   document.getElementById('field').focus();
+  let entries = parseInt(document.getElementById('entries').value);
   let {filteredData}=this.state;
   const currentlyEditing = i;
   if (currentlyEditing > -1) {
@@ -174,27 +173,28 @@ startEditing = (i) => {
           },
           uploaded:true,
           act: 1,
-          index: i
+          index: i,
+          currentPage:i/entries
         })
       }
     })
   }      
 }
-assignPage=()=>{
+assignPage=(dataList)=>{
+  console.log(dataList);
   let entries=parseInt(document.getElementById('entries').value);
-  this.setState({pages:Math.ceil(this.state.dataList.length/entries),
-    filteredData:this.state.dataList.filter((data,i)=>i<entries)})
+  this.setState({pages:Math.ceil(dataList.length/entries),
+    filteredData:dataList.filter((data,i)=>i<entries)})
 }
 
 handleEntryChange = () => {
-this.assignPage();
+this.assignPage(this.state.dataList);
 }
 activePage=(i)=>{
 let entries=parseInt(document.getElementById('entries').value);
 let {pages}=this.state;
 if(i>pages)i=pages;
 if(i<1)i=1;
-console.log(i);
 let {filteredData}=this.state;
  filteredData=this.state.dataList.filter((data,num)=>{
         return num>=(entries*(i-1))&&num<(entries*i)
@@ -205,12 +205,14 @@ this.setState({active:i,filteredData,slNo:entries*(i-1)})
 removeData = (i) => {
   let index = i;
   let reference = firebaseDB.ref('data');
-  let {filteredData}=this.state;
+  let {filteredData,active}=this.state;
+  console.log(active);
   let val=filteredData[index].email;
     reference.orderByChild('email').equalTo(val).on('value',snapshot=>{
       snapshot.forEach(snap=>{
         reference.child(snap.key).remove();
       })
+       this.resetPage(active);
     })
   }
    getDataUri=(url,cb)=>
@@ -259,14 +261,14 @@ doc.save(`${data[0].fullName} Details`)
   sortDBName=()=>{
     firebaseDB.ref('data').orderByChild('fullName').once('value').then(snapshot=>{
       const dataList=firebaseLooper(snapshot)
-          this.setState({dataList},()=>{this.assignPage()})
+      this.setState({dataList,active:1},()=>{this.assignPage(this.state.dataList)})
 
     })
     }
     sortDBEmail=()=>{
       firebaseDB.ref('data').orderByChild('email').once('value').then(snapshot=>{
         const dataList=firebaseLooper(snapshot)
-          this.setState({dataList},()=>{this.assignPage()})
+        this.setState({dataList,active:1},()=>{this.assignPage(this.state.dataList)})
     }
       )
       
@@ -275,7 +277,7 @@ doc.save(`${data[0].fullName} Details`)
   
       firebaseDB.ref('data').orderByChild('mobileNumber').once('value').then(snapshot=>{
         const dataList=firebaseLooper(snapshot)
-        this.setState({dataList},()=>{this.assignPage()})
+        this.setState({dataList,active:1},()=>{this.assignPage(this.state.dataList)})
     }
       )
   }
@@ -286,8 +288,10 @@ handleSearchChange = (e) => {
   firebaseDB.ref("data").on("value", snapshot => {
     const dataList=firebaseLooper(snapshot)
     let filteredData=dataList.filter((data) => data.fullName.toLowerCase().includes(searchField.toLowerCase())).concat(dataList.filter((data, i) => data.email.toLowerCase().includes(searchField.toLowerCase())),dataList.filter((data) => data.mobileNumber.includes(searchField.toLowerCase())))
-    this.setState({filteredData});
-  });
+    this.setState({filteredData,active:1},()=>{
+      this.assignPage(this.state.filteredData)
+    })
+})
 }
     render() {
       const buttonVal=this.state.act===0;
