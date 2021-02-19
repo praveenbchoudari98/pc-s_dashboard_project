@@ -139,6 +139,8 @@ onSubmit = e => {
   }
 }
 resetPage=()=>{
+  let {pages}=this.state;
+  
   this.setState({
     values: {
       fullName: '',
@@ -151,6 +153,8 @@ resetPage=()=>{
     progress:0,
     act: 0,
     index: '',
+  },()=>{
+    this.activePage(pages);
   })
 }
 startEditing = (i) => {
@@ -190,6 +194,7 @@ let entries=parseInt(document.getElementById('entries').value);
 let {pages}=this.state;
 if(i>pages)i=pages;
 if(i<1)i=1;
+console.log(i);
 let {filteredData}=this.state;
  filteredData=this.state.dataList.filter((data,num)=>{
         return num>=(entries*(i-1))&&num<(entries*i)
